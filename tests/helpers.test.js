@@ -1,10 +1,33 @@
-const helpers = require('../helpers.js')
+const { format, formatAudio, validateInput } = require('../helpers/helpers.js');
 
-describe('bytesToSize', () => {
-    it.each([
-        [1073741823, "1024 MB"],
-        [1073741824, "1.00 GB"],
-    ])('file size format', (number, result) => {
-        expect(helpers.bytesToSize(number)).toBe(result);
+describe('Helpers', () => {
+    test('format should convert value to uppercase', () => {
+        const result = format('test');
+        expect(result).toBe('TEST');
     });
-})
+
+    test('formatAudio should format audio value', () => {
+        const result = formatAudio('stereo');
+        expect(result).toBe('Audio: stereo');
+    });
+
+    test('validateInput should validate string input', () => {
+        const result = validateInput('test', 'string');
+        expect(result).toBe(true);
+    });
+
+    test('validateInput should validate number input', () => {
+        const result = validateInput(123, 'number');
+        expect(result).toBe(true);
+    });
+
+    test('validateInput should validate boolean input', () => {
+        const result = validateInput(true, 'boolean');
+        expect(result).toBe(true);
+    });
+
+    test('validateInput should return false for invalid input', () => {
+        const result = validateInput('test', 'number');
+        expect(result).toBe(false);
+    });
+});

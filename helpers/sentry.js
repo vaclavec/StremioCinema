@@ -2,21 +2,21 @@ const env = require('./env.js')
 const Sentry = require("@sentry/node");
 const ProfilingIntegration = require("@sentry/profiling-node").ProfilingIntegration;
 
-function init(app){
+function init(app) {
     Sentry.init({
-        environment: env.DEBUG ? "develop" : "production",
         dsn: env.SENTRY_DSN,
         integrations: [
             new Sentry.Integrations.Http({ tracing: true }),
-            new Sentry.Integrations.Express({ app }),
             new ProfilingIntegration(),
         ],
-        tracesSampleRate: 0.5,
-        profilesSampleRate: 0.5,
+        tracesSampleRate: 1.0,
+        profilesSampleRate: 1.0,
     });
 
     app.use(Sentry.Handlers.requestHandler());
     app.use(Sentry.Handlers.tracingHandler());
+
+    app.use(Sentry.Handlers.errorHandler());
 }
 
 module.exports = {

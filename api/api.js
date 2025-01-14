@@ -3,7 +3,7 @@ const needle = require('needle');
 
 const logger = new Logger("CALL", true)
 
-async function call(method, url, data = null) {
+async function call(method, url, data = null, retries = 3) {
     try {
         const options = {
             json: true,
@@ -26,8 +26,13 @@ async function call(method, url, data = null) {
             throw new Error(`HTTP error: ${response.statusCode} ${response.statusMessage}`);
         }
     } catch (error) {
-        logger.error(`Error calling ${method} ${url}: ${error.message}`);
-        throw error;
+        if (retries > 0) {
+            logger.warn(`Retrying ${method} ${url}: ${error.message}`);
+            return call(method, url, data, retries - 1);
+        } else {
+            logger.error(`Error calling ${method} ${url}: ${error.message}`);
+            throw error;
+        }
     }
 }
 

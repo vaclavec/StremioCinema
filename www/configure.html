@@ -4,21 +4,27 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Stremio Cinema</title>
+	<title>Configure Stremio Cinema</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.min.js"
 		integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg=="
 		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css"
-		integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg=="
-		crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link rel="stylesheet" href="/static/css/styles.css">
-	</link>
+	<link rel="stylesheet" href="styles.css">
 	<script type="text/javascript">
 		function getValue(name) {
-			return document.getElementById(name).value
+			return document.getElementById(name).value;
 		}
 		function getChecked(name) {
-			return document.getElementById(name).checked
+			return document.getElementById(name).checked;
+		}
+
+		function validateForm() {
+			const name = getValue("name");
+			const password = getValue("password");
+			if (!name || !password) {
+				alert("Name and Password are required!");
+				return false;
+			}
+			return true;
 		}
 
 		function getFormData(e) {
@@ -39,113 +45,131 @@
 
 		document.addEventListener('DOMContentLoaded', function () {
 
-			document.getElementById("tmdbOptinal").style.display = "none"
+			document.getElementById("tmdbOptinal").style.display = "none";
 
 			document.getElementById("tmdbEnabled").addEventListener('change', function () {
-				document.getElementById("tmdbOptinal").style.display = this.checked ? "block" : "none"
+				document.getElementById("tmdbOptinal").style.display = this.checked ? "block" : "none";
 			});
 
 			document.getElementById('theform').onsubmit = function (e) {
 				e.preventDefault(); // Prevent the default form submission
 
+				if (!validateForm()) {
+					return;
+				}
+
 				var formData = getFormData(e);
 
-				var launchUrl = 'stremio://' + window.location.host + `/1/${formData}/manifest.json`
+				var launchUrl = 'stremio://' + window.location.host + `/1/${formData}/manifest.json`;
 
 				document.getElementById('formDataDisplay').value = launchUrl;
 
 				console.log(launchUrl);
 				// Redirect to app URL
-				window.location.href = launchUrl
+				window.location.href = launchUrl;
 			};
 		});
 	</script>
-
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .form-floating {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .form-text {
+            color: #b0b0b0;
+        }
+    </style>
 </head>
 
-<body class="d-flex align-items-center" style="min-height: 100vh;">
-	<div class="container py-5 my-auto">
-		<div class="row justify-content-center">
-			<div class="col-md-6">
-				<div class="banner mb-3 p-3 text-center">
-					<h1>Stremio Cinema</h1>
-					<p>v1.0.0</p>
-					<p> Ak chcete pomocts s vyvojom alebo vytvorit ticket: <a
-							href="https://github.com/ljsydpwym/StremioCinema"><i>GitHub</i></a></p>
-				</div>
-				<form id="theform">
-					<div class="form-floating mb-3">
-						<input required type="text" class="form-control" id="name" name="name" placeholder="Meno">
-						<label for="name">Meno</label>
-					</div>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form id="theform">
+                    <div class="form-floating mb-3">
+                        <input required type="text" class="form-control" id="name" name="name" placeholder="Meno">
+                        <label for="name">Meno</label>
+                    </div>
 
-					<div class="form-floating mb-3">
-						<input required type="password" class="form-control" id="password" name="password"
-							placeholder="Heslo">
-						<label for="password">Heslo</label>
-					</div>
+                    <div class="form-floating mb-3">
+                        <input required type="password" class="form-control" id="password" name="password" placeholder="Heslo">
+                        <label for="password">Heslo</label>
+                    </div>
 
-					<div class="form-floating mb-3">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" id="tmdbEnabled" name="tmdbEnabled">
-							<label class="form-check-label" for="tmdbEnabled">TMDB?</label>
-							<div id="emailHelp" class="form-text">Kvalitnejsie data za cenu dlhsieho nacitania</div>
-						</div>
-					</div>
+                    <div class="form-floating mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="tmdbEnabled" name="tmdbEnabled">
+                            <label class="form-check-label" for="tmdbEnabled">TMDB?</label>
+                            <div id="emailHelp" class="form-text">Kvalitnejšie data za cenu dlhšieho načitania</div>
+                        </div>
+                    </div>
 
-					<div id="tmdbOptinal">
-						<div class="form-floating mb-3">
-							<select required class="form-select" id="tmdbMainLang" name="tmdbMainLang" aria-label="CZ">
-								<option selected value="cs_CZ">CZ</option>
-								<option value="sk_SK">SK</option>
-								<option value="en_US">EN</option>
-							</select>
-							<label for="tmdbMainLang">TMDB Primarny jazyk</label>
-							<div id="emailHelp" class="form-text">Prvy jazyk pre data</div>
-						</div>
+                    <div id="tmdbOptinal">
+                        <div class="form-floating mb-3">
+                            <select required class="form-select" id="tmdbMainLang" name="tmdbMainLang" aria-label="CZ">
+                                <option selected value="cs_CZ">CZ</option>
+                                <option value="sk_SK">SK</option>
+                                <option value="en_US">EN</option>
+                            </select>
+                            <label for="tmdbMainLang">TMDB Primárny jazyk</label>
+                            <div id="emailHelp" class="form-text">Prvý jazyk pre dáta</div>
+                        </div>
 
-						<div class="form-floating mb-3">
-							<select required class="form-select" id="tmdbFallbackLang" name="tmdbFallbackLang"
-								aria-label="CZ">
-								<option value="cs_CZ">CZ</option>
-								<option selected value="sk_SK">SK</option>
-								<option value="en_US">EN</option>
-							</select>
-							<label for="tmdbFallbackLang">TMDB Alternativny jazyk</label>
-							<div id="emailHelp" class="form-text">Alternativny jazyk v pripade ze prvy nieje kompletny
-							</div>
-						</div>
-					</div>
+                        <div class="form-floating mb-3">
+                            <select required class="form-select" id="tmdbFallbackLang" name="tmdbFallbackLang" aria-label="CZ">
+                                <option value="cs_CZ">CZ</option>
+                                <option selected value="sk_SK">SK</option>
+                                <option value="en_US">EN</option>
+                            </select>
+                            <label for="tmdbFallbackLang">TMDB Alternatívny jazyk</label>
+                            <div id="emailHelp" class="form-text">Alternatívny jazyk v prípade, že prvý jazyk nie je kompatibilný</div>
+                        </div>
+                    </div>
 
-					<div class="form-floating mb-3">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" id="allowExplicit" name="allowExplicit">
-							<label class="form-check-label" for="allowExplicit">Explicitny obsah?</label>
-						</div>
-					</div>
+                    <div class="form-floating mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="allowExplicit" name="allowExplicit">
+                            <label class="form-check-label" for="allowExplicit">Explicitný obsah?</label>
+                        </div>
+                    </div>
 
-					<div class="form-floating mb-3">
-						<input required type="number" class="form-control" id="pageSize" name="pageSize"
-							placeholder="Pocet filmov na stranke" value="10">
-						<label for="pageSize">Pocet filmov na stranke</label>
-						<div id="emailHelp" class="form-text">Vyssie cislo sposobi pomalsie nacitanie</div>
-					</div>
+                    <div class="form-floating mb-3">
+                        <input required type="number" class="form-control" id="pageSize" name="pageSize" placeholder="Pocet filmov na stranke" value="10">
+                        <label for="pageSize">Počet filmov na stránke</label>
+                        <div id="emailHelp" class="form-text">Vyššie číslo spôsobí pomalšie načítanie</div>
+                    </div>
 
-					<div class="d-grid gap-2 mb-3">
-						<button type="submit" class="btn btn-primary btn-lg">Instalovat</button>
-					</div>
+                    <div class="d-grid gap-2 mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Inštalovať</button>
+                    </div>
 
-					<div class="form-group mb-3">
-						<label class="text-muted" for="formDataDisplay">Kliknite na Instalovat alebo skopirujte tento
-							odkaz do Stremio vyhladavania</label>
-						<br>
-						<textarea disabled class="form-control mb-3" id="formDataDisplay" rows="3"></textarea>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-
+                    <div class="form-group mb-3">
+                        <label class="text-muted" for="formDataDisplay">Kliknite na Inštalovať alebo skopírujte tento odkaz do Stremio vyhľadávania</label>
+                        <br>
+                        <textarea disabled class="form-control mb-3" id="formDataDisplay" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

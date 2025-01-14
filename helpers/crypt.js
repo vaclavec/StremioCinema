@@ -993,8 +993,22 @@ function decrypt(text) {
     return decrypted.toString();
 }
 
+const { createHash, randomBytes } = require('crypto');
+
+function hashPassword(password) {
+    const hash = createHash('sha256');
+    hash.update(password);
+    return hash.digest('hex');
+}
+
+function generateRandomToken() {
+    return randomBytes(16).toString('hex');
+}
+
 module.exports = {
     md5crypt,
     encrypt,
-    decrypt
+    decrypt,
+    hashPassword,
+    generateRandomToken
 };

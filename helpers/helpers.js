@@ -1,12 +1,9 @@
 function format(value) {
-    if (typeof value === 'string') {
-        return value.trim();
-    }
-    return value;
+    return value.toString().toUpperCase();
 }
 
 function formatAudio(value) {
-    return `${format(value.language)}`
+    return `Audio: ${value}`;
 }
 
 function formatAudioExtra(value) {
@@ -146,6 +143,18 @@ function parseJson(jsonString) {
     }
 }
 
+function validateInput(input, type) {
+    if (type === 'string') {
+        return typeof input === 'string';
+    } else if (type === 'number') {
+        return typeof input === 'number';
+    } else if (type === 'boolean') {
+        return typeof input === 'boolean';
+    } else {
+        return false;
+    }
+}
+
 module.exports = {
     format,
     formatHeight,
@@ -162,5 +171,6 @@ module.exports = {
     formatAudioExtra,
     formatBitrate,
     isValidUrl,
-    parseJson
+    parseJson,
+    validateInput
 }

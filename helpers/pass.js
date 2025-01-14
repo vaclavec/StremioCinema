@@ -1,17 +1,17 @@
-const { createHash, randomBytes } = require('crypto');
+const bcrypt = require('bcrypt');
 
-function hashPassword(password) {
-    const salt = randomBytes(16).toString('hex');
-    const hash = createHash('sha256').update(password + salt).digest('hex');
-    return { salt, hash };
+async function hashPassword(password) {
+    const saltRounds = 10;
+    const hash = await bcrypt.hash(password, saltRounds);
+    return hash;
 }
 
-function verifyPassword(password, salt, hash) {
-    const hashToVerify = createHash('sha256').update(password + salt).digest('hex');
-    return hash === hashToVerify;
+async function verifyPassword(password, hash) {
+    const match = await bcrypt.compare(password, hash);
+    return match;
 }
 
 module.exports = {
     hashPassword,
     verifyPassword
-};
+}

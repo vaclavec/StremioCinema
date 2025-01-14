@@ -4,24 +4,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stremio Link Generator</title>
+  <title>Stremio Cinema</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f1f1f1;
+      background-color: #121212;
+      color: #ffffff;
       margin: 0;
       padding: 0;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
 
+    header, footer {
+      text-align: center;
+    }
+
     .login-container {
-      background-color: #fff;
+      background-color: #1e1e1e;
       padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       max-width: 550px;
       width: 100%;
       text-align: center;
@@ -32,26 +39,27 @@
     }
 
     .login-container input[type="text"],
-    .login-container input[type="password"] {
-      width: calc(100% - 20px);
+    .login-container input[type="password"],
+    .login-container input[type="submit"] {
+      width: 100%;
       padding: 10px;
       margin-bottom: 10px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
+      border: none;
+      border-radius: 5px;
     }
 
     .login-container input[type="submit"] {
-      width: calc(100% - 20px);
-      padding: 10px;
       background-color: #007bff;
       color: #fff;
-      border: none;
-      border-radius: 3px;
       cursor: pointer;
     }
 
     .login-container input[type="submit"]:hover {
       background-color: #0056b3;
+    }
+
+    .form-text {
+      color: #b0b0b0;
     }
 
     #output>div {
@@ -62,14 +70,23 @@
 </head>
 
 <body>
-  <div class="login-container">
-    <form>
-      <input type="text" name="username" id="name" placeholder="Username" required>
-      <input type="password" name="password" id="password" placeholder="Password" required>
-      <input style="width: 100%;" type="submit" id="generate" value="Login">
-      <p id="output"></p>
-    </form>
-  </div>
+  <header>
+    <h1>Welcome to Stremio Cinema</h1>
+  </header>
+  <main>
+    <p>Enjoy watching movies and TV shows from various sources.</p>
+    <div class="login-container">
+      <form>
+        <input type="text" name="username" id="name" placeholder="Username" required>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <input type="submit" id="generate" value="Login">
+        <p id="output"></p>
+      </form>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2025 Stremio Cinema</p>
+  </footer>
 
   <script>
     function generate(e) {
@@ -81,13 +98,12 @@
       console.log("base64", base64)
       const urlEncoded = encodeURIComponent(base64)
       console.log("urlEncoded", urlEncoded)
-      const link = `stremio://stremio-cinema.vercel.app/1/${urlEncoded}/manifest.json`
-      navigator.clipboard.writeText(link)
+      navigator.clipboard.writeText(urlEncoded)
       document.getElementById("output").innerHTML = `
       <div>Addon link copied to clipboard!</div>
       <div>Click on the link OR paste it into Stremio -> Addons -> Search addon box</div>
       <br>
-      <div><a style="word-wrap: break-word;" href="${link}">${link}</a></div>
+      <div><a style="word-wrap: break-word;" href="${urlEncoded}">${urlEncoded}</a></div>
       `
     }
 

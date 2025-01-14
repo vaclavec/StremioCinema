@@ -23,8 +23,23 @@ async function getCatalog(type, id, extra) {
 module.exports = async (req, res) => {
     const { type, id } = req.params;
     const extra = req.query;
+
+    // Validace vstupů
+    if (!type || !id) {
+        return res.status(400).send({ error: 'Type and ID are required parameters' });
+    }
+
+    // Přidání pokročilého vyhledávání
+    const validFilters = ['genre', 'year', 'language'];
+    const filters = {};
+    validFilters.forEach(filter => {
+        if (extra[filter]) {
+            filters[filter] = extra[filter];
+        }
+    });
+
     try {
-        const catalog = await getCatalog(type, id, extra);
+        const catalog = await getCatalog(type, id, filters);
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify({ catalog }));
     } catch (error) {

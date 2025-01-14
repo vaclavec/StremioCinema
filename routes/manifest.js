@@ -1,46 +1,48 @@
 const Logger = require('../helpers/logger.js')
 const env = require('../helpers/env.js')
 
-const manifest = {
-    id: env.PLUGIN_ID,
-    version: env.VERSION,
-    name: env.PLUGIN_NAME,
-    description: "Stremio addon for streaming content from Webshare.cz",
-    resources: ["catalog", "meta", "stream"],
-    types: ["movie", "series", "anime", "channel"],
-    idPrefixes: ["tt", "kitsu:", "yt_id:"],
-    catalogs: [
-        {
-            type: "movie",
-            id: "webshare-movies",
-            name: "Webshare Movies",
-            extra: [{ name: "search", isRequired: false }]
-        },
-        {
-            type: "series",
-            id: "webshare-series",
-            name: "Webshare Series",
-            extra: [{ name: "search", isRequired: false }]
-        },
-        {
-            type: "anime",
-            id: "webshare-anime",
-            name: "Webshare Anime",
-            extra: [{ name: "search", isRequired: false }]
-        },
-        {
-            type: "channel",
-            id: "webshare-channels",
-            name: "Webshare Channels",
-            extra: [{ name: "search", isRequired: false }]
-        }
-    ],
-    background: "https://stremio-cinema.com/background.jpg",
-    logo: "https://stremio-cinema.com/logo.png",
-    contactEmail: "support@stremio-cinema.com"
-};
+const logger = new Logger("MANIFEST", true);
 
-module.exports = (req, res) => {
+function manifest(req, res) {
+    const lang = req.query.lang || 'en';
+    const manifestData = {
+        id: 'org.stremio.cinema',
+        version: '1.0.0',
+        name: 'Stremio Cinema',
+        description: {
+            en: 'Watch movies and TV shows from various sources.',
+            cs: 'Sledujte filmy a televizní pořady z různých zdrojů.',
+            sk: 'Sledujte filmy a televízne programy z rôznych zdrojov.'
+        }[lang],
+        resources: ['catalog', 'meta', 'stream'],
+        types: ['movie', 'series'],
+        catalogs: [
+            {
+                type: 'movie',
+                id: 'cinema-movies',
+                name: {
+                    en: 'Movies',
+                    cs: 'Filmy',
+                    sk: 'Filmy'
+                }[lang]
+            },
+            {
+                type: 'series',
+                id: 'cinema-series',
+                name: {
+                    en: 'TV Shows',
+                    cs: 'Televizní pořady',
+                    sk: 'Televízne programy'
+                }[lang]
+            }
+        ],
+        idPrefixes: ['tt']
+    };
+
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(manifest));
-};
+    res.send(JSON.stringify(manifestData));
+}
+
+module.exports = {
+    manifest
+}

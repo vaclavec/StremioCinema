@@ -21,9 +21,27 @@ function settingsLoader(input) {
         params = input;
     }
 
+    // Načítání konfigurace z localStorage
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const savedSettings = window.localStorage.getItem('stremioCinemaSettings');
+        if (savedSettings) {
+            params = JSON.parse(savedSettings);
+        }
+    }
+
+    // Přepsání hodnot z inputu
+    if (input) {
+        params = { ...params, ...input };
+    }
+
     // Validace a zpracování chyb
     if (!params || typeof params !== 'object') {
         throw new Error('Invalid settings input');
+    }
+
+    // Ukládání konfigurace do localStorage
+    if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.setItem('stremioCinemaSettings', JSON.stringify(params));
     }
 
     //NEVER REMOVE FIELDS - this will create issue with backward compatibility - ONLY ADD NEW

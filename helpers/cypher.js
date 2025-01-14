@@ -7,16 +7,17 @@ const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 
 function encrypt(text) {
-    const cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
+    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
     let encrypted = cipher.update(text);
     encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
+    return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
 function decrypt(text) {
-    const iv = Buffer.from(text.iv, 'hex');
-    const encryptedText = Buffer.from(text.encryptedData, 'hex');
-    const decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
+    let textParts = text.split(':');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);
     return decrypted.toString();
@@ -25,4 +26,4 @@ function decrypt(text) {
 module.exports = {
     encrypt,
     decrypt
-};
+}

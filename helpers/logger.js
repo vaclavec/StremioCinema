@@ -6,7 +6,6 @@ class Logger {
     constructor(tag, enabled = true) {
         this.tag = tag;
         this.enabled = enabled;
-        this.logFile = path.join(__dirname, '..', 'log.txt');
     }
 
     log(message, level = 'info') {
@@ -31,7 +30,8 @@ class Logger {
     }
 
     logToFile(message) {
-        fs.appendFileSync(this.logFile, message + '\n', 'utf8');
+        const logFilePath = path.join(__dirname, '..', 'log.txt');
+        fs.appendFileSync(logFilePath, message + '\n', 'utf8');
     }
 }
 
